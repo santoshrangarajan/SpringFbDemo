@@ -5,10 +5,7 @@
 .project
 .DS_Store
 .settings/
-.idea/
-out/
 bin/
-intellij/
 build/
 *.log
 *.log.*
