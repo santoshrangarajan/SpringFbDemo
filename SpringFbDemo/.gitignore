@@ -12,4 +12,4 @@ build/
 *.iml
 *.ipr
 *.iws
-*.properties
+/src/main/webapp/WEB-INF/spring.properties
