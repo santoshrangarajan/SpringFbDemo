@@ -16,10 +16,7 @@
 				<div>
 					<form action="/connect/facebook/"  method="POST">
 						<input type="hidden" name="scope" value="publish_stream,offline_access" />
-						<p>You haven't created any connections with 
-							Social Media yet. Click the button to create a connection between your account and 
-							your Social Media profile. (You'll be redirected to Twitter where you'll be
-							asked to authorize the connection.)</p>
+						<p>Connect to Facebook</p>
 						<button type="submit" text="Connect with Facebook">Connect</button>
 					</form>
 				</div>

@@ -15,10 +15,9 @@
 		<div>
 			
 			<div>
-				<h3 >Success! You have connected to Social Site!</h3>
+				
 				<p>
-					Facebook is connected to your Social Site account.
-					Click the button if you wish to disconnect.</span>
+					You are connected to facebook. Click below to disconnect
 				</p>
 				
 				<form id="disconnect" action="/connect/facebook/"  method="post">
