@@ -1,17 +1,15 @@
 SpringFbDemo
 ================
 
-Spring Facebook Integration using Spring Social
+Facebook Integration using spring social
 
 Installation
 ================
 1. Create a Spring Template Project ( Spring MVC) in eclipse
 2. Copy the configurations and views to WEB-INF directory
-3. Copy controller,dto,helper files from  src/main/java under appropriate package structure
+3. Copy controller,dto,helper files from src/main/java under appropriate package structure
 3. Run the project via eclipse
 
-Usage
-========
 
 License
 ========
