@@ -13,7 +13,7 @@
 			
 	<context:property-placeholder properties-ref="deployProperties" />
 
-	<bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
+	<bean id="connectionFactoryRegistry" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
 		<property name="connectionFactories">
 			<list>
 				<bean class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
@@ -27,17 +27,18 @@
 	<bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" 
 		factory-method="noOpText" />
 	
-	<!-- using default JDBC connection repository -->
-	<bean id="usersConnectionRepository" class="org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository">
+	
+	<bean id="jdbcConnectionRepository" class="org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository">
 	    <constructor-arg ref="dataSource" />
-	    <constructor-arg ref="connectionFactoryLocator" />
+	    <constructor-arg ref="connectionFactoryRegistry" />
 	    <constructor-arg ref="textEncryptor" />
 	</bean>
 	
-	<!--  request scoped bean for current logged in user -->
-	<bean id="connectionRepository" factory-method="createConnectionRepository" 
-			factory-bean="usersConnectionRepository" scope="request">
-	    <constructor-arg value="guest" />
+	
+	<!--  request scoped bean for  -->
+	<bean id="userConnectionRepository" factory-method="createConnectionRepository" 
+			factory-bean="jdbcConnectionRepository" scope="request">
+	    <constructor-arg value="#{request.getRequestURI().split('/').length > 3 ? request.getRequestURI().split('/')[3] : 'guest'}" />
 	    <aop:scoped-proxy proxy-target-class="false"/>
 	</bean>
 	
@@ -59,5 +60,6 @@
 		p:maxPoolSize="100"
 		p:maxStatements="50"
 		p:minPoolSize="10" />
+	
 	
 </beans>

@@ -15,7 +15,6 @@
 		<div>
 			
 			<div>
-				
 				<p>
 					You are connected to facebook. Click below to disconnect
 				</p>

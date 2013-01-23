@@ -27,55 +27,57 @@ public class FbConnectionHelper {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FbConnectionHelper.class);
 	
-	@Autowired
-	private ConnectionRepository connectionRepository;
+	//@Autowired
+	//private ConnectionRepository userConnectionRepository;
 	
 	@Autowired
-	private ConnectionFactoryRegistry connectionFactoryLocator;
+	private ConnectionFactoryRegistry connectionFactoryRegistry;
 	
 	
 	/*
 	 * if providerUserId not found, throws execution
 	*/
-	public ConnectionData getConnectionData(String providerUserId)  {
+	private boolean checkConnectionDataExists(String providerUserId, ConnectionRepository userConnectionRepository)  {
 		logger.info("getConnectionData -"+providerUserId);
 		try{
-		  Connection<Facebook> existingFacebookConnection = connectionRepository.getConnection(Facebook.class, providerUserId);
-		  ConnectionData existingConnectionData = existingFacebookConnection.createData();
-		  
-		  return existingConnectionData;
+		  Connection<Facebook> existingFacebookConnection = userConnectionRepository.getConnection(Facebook.class, providerUserId);
+		 // ConnectionData existingConnectionData = existingFacebookConnection.createData();
+		  return true;
 		} catch (Exception ex){
 			logger.error("Could not find connection info for"+providerUserId,ex);
-			return null;
+			return false;
 		}
          
 	}
 	
-	public void updateExistingConnection(ConnectionData existingConnectionData, String facebookAccessToken){
-		logger.info("updateExistingConnection -"+facebookAccessToken);
-		 ConnectionFactory<Facebook> facebookConnectionFactory = connectionFactoryLocator.getConnectionFactory(Facebook.class);
-		 
-		  ConnectionData  updatedConnectionData = new ConnectionData(existingConnectionData.getProviderId(),
-                  existingConnectionData.getProviderUserId(), 
-                  existingConnectionData.getDisplayName(), 
-                  existingConnectionData.getProfileUrl(), 
-                  existingConnectionData.getImageUrl(), 
-                  facebookAccessToken, 
-                  existingConnectionData.getSecret(),
-                  existingConnectionData.getRefreshToken(),
-                  getNewExpireTime());
-		
-		  Connection<Facebook> newfacebookConnection = facebookConnectionFactory.createConnection(updatedConnectionData);
-		  connectionRepository.updateConnection(newfacebookConnection);
-		
+	public boolean checkForUserInRepository(String providerUserId , ConnectionRepository userConnectionRepository){
+		return checkConnectionDataExists(providerUserId,userConnectionRepository);
 	}
 	
-	public void addNewConnection(String providerUserId, String facebookAccessToken) {
-		logger.info("addNewConnection -"+facebookAccessToken);
-		ConnectionFactory<Facebook> facebookConnectionFactory = connectionFactoryLocator.getConnectionFactory(Facebook.class);
+    public void updateExistingConnectionInRepository(String providerUserId, String facebookAccessToken,ConnectionRepository userConnectionRepository ){
+    	 logger.info("updateExistingConnection -"+facebookAccessToken);
+		 ConnectionFactory<Facebook> facebookConnectionFactory = connectionFactoryRegistry.getConnectionFactory(Facebook.class);
+		 ConnectionData existingConnectionData = userConnectionRepository.getConnection(Facebook.class, providerUserId).createData();
+		 ConnectionData  updatedConnectionData = new ConnectionData(existingConnectionData.getProviderId(),
+                                                                   existingConnectionData.getProviderUserId(), 
+                                                                   existingConnectionData.getDisplayName(), 
+												                   existingConnectionData.getProfileUrl(), 
+												                   existingConnectionData.getImageUrl(), 
+												                   facebookAccessToken, 
+												                   existingConnectionData.getSecret(),
+												                   existingConnectionData.getRefreshToken(),
+												                   getNewExpireTime());
+		
+		  Connection<Facebook> newfacebookConnection = facebookConnectionFactory.createConnection(updatedConnectionData);
+		  userConnectionRepository.updateConnection(newfacebookConnection);
+	}
+
+    public void addNewConnectionToRepository(String providerUserId, String facebookAccessToken , ConnectionRepository userConnectionRepository){
+    	logger.info("addNewConnection -"+facebookAccessToken);
+		ConnectionFactory<Facebook> facebookConnectionFactory = connectionFactoryRegistry.getConnectionFactory(Facebook.class);
 		ConnectionData updatedConnectionData = new ConnectionData("facebook",
                                                                  providerUserId, 
-												                null, 
+												                  null, 
 												                null, 
 												                null, 
 												                facebookAccessToken, 
@@ -84,8 +86,46 @@ public class FbConnectionHelper {
 												                getNewExpireTime());
 
           Connection<Facebook> newfacebookConnection = facebookConnectionFactory.createConnection(updatedConnectionData);
-          connectionRepository.addConnection(newfacebookConnection);
+          userConnectionRepository.addConnection(newfacebookConnection);
+     }
+	
+	
+	
+	/*private void updateExistingConnection(String providerUserId, String facebookAccessToken, ConnectionRepository userConnectionRepository){
+		 logger.info("updateExistingConnection -"+facebookAccessToken);
+		 ConnectionFactory<Facebook> facebookConnectionFactory = connectionFactoryRegistry.getConnectionFactory(Facebook.class);
+		 ConnectionData existingConnectionData = userConnectionRepository.getConnection(Facebook.class, providerUserId).createData();
+		 ConnectionData  updatedConnectionData = new ConnectionData(existingConnectionData.getProviderId(),
+                                                                   existingConnectionData.getProviderUserId(), 
+                                                                   existingConnectionData.getDisplayName(), 
+												                   existingConnectionData.getProfileUrl(), 
+												                   existingConnectionData.getImageUrl(), 
+												                   facebookAccessToken, 
+												                   existingConnectionData.getSecret(),
+												                   existingConnectionData.getRefreshToken(),
+												                   getNewExpireTime());
+		
+		  Connection<Facebook> newfacebookConnection = facebookConnectionFactory.createConnection(updatedConnectionData);
+		  userConnectionRepository.updateConnection(newfacebookConnection);
+		
 	}
+	
+	private void addNewConnection(String providerUserId, String facebookAccessToken, ConnectionRepository userConnectionRepository) {
+		logger.info("addNewConnection -"+facebookAccessToken);
+		ConnectionFactory<Facebook> facebookConnectionFactory = connectionFactoryRegistry.getConnectionFactory(Facebook.class);
+		ConnectionData updatedConnectionData = new ConnectionData("facebook",
+                                                                 providerUserId, 
+												                  null, 
+												                null, 
+												                null, 
+												                facebookAccessToken, 
+												                null,
+												                null,
+												                getNewExpireTime());
+
+          Connection<Facebook> newfacebookConnection = facebookConnectionFactory.createConnection(updatedConnectionData);
+          userConnectionRepository.addConnection(newfacebookConnection);
+	}*/
 	
 	
 	/*private void doAutoLogin(String username, String password, HttpServletRequest request) {
