@@ -27,18 +27,10 @@
 	<!-- Maps resources path to webapp/resources -->
 	<mvc:resources mapping="/resources/**" location="/resources/" /> 
 	
-	<!-- Provides internationalization of messages -->
-	<!--  bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
-		p:basename="messages" / -->
 	
 	<!-- Imports Spring Social configuration -->
 	<import resource="spring-social.xml"/>
 	
-	<!-- Imports datasource configuration -->
-	<!--  import resource="spring-data.xml"/ -->
-
- 	<!-- Imports logging configuration -->
-	<!--  import resource="trace-context.xml"/ -->
 	
 	<bean id="deployProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean"
         p:location="/WEB-INF/spring.properties" />

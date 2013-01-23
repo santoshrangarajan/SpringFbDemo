@@ -8,8 +8,12 @@ Installation
 1. Create a Spring Template Project ( Spring MVC) in eclipse
 2. Copy the configurations and views to WEB-INF directory
 3. Copy controller,dto,helper files from src/main/java under appropriate package structure
+4. Run the sql script to create userconnection table
 3. Run the project via eclipse
 
+Usage
+========
+1. Please refer <a href="http://abstractlayers.com/2013/01/23/quick-facebook-integration-using-spring-social/">here</a> on overview about application
 
 License
 ========
